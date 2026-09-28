@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tillie's Wine Cellar 🍷</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #fafaf9; color: #1c1917;
+  }
+  header { background: #fff; border-bottom: 1px solid #e7e5e4; padding: 32px 20px; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  h1 { margin: 0; font-size: 30px; letter-spacing: -0.02em; }
+  .subtitle { margin: 4px 0 0; color: #78716c; }
+  .controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 24px auto; }
+  input[type=search] {
+    padding: 8px 12px; border: 1px solid #d6d3d1; border-radius: 8px;
+    font-size: 14px; width: 100%; max-width: 280px; outline: none; background: #fff;
+  }
+  input[type=search]:focus { border-color: #78716c; }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  .filters button {
+    padding: 6px 14px; border-radius: 999px; border: 1px solid #d6d3d1;
+    background: #fff; font-size: 14px; cursor: pointer; font-family: inherit; color: inherit;
+  }
+  .filters button.active { background: #1c1917; border-color: #1c1917; color: #fff; }
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr); padding-bottom: 40px; }
+  @media (min-width: 640px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 960px) { .grid { grid-template-columns: repeat(4, 1fr); } }
+  .card { background: #fff; border: 1px solid #e7e5e4; border-radius: 12px; overflow: hidden; transition: opacity .2s; }
+  .card .photo { aspect-ratio: 3/4; background: #f5f5f4; }
+  .card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: filter .2s, opacity .2s; }
+  .card .body { padding: 12px; }
+  .card .meta { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #a8a29e; }
+  .card h3 { margin: 2px 0 0; font-size: 15px; line-height: 1.2; }
+  .card .name { margin: 2px 0 0; font-size: 13px; color: #78716c; }
+  .card .notes { margin: 6px 0 0; font-size: 12px; color: #a8a29e; }
+
+  /* opened state */
+  .card.opened { opacity: 0.55; }
+  .card.opened img { filter: grayscale(1); opacity: 0.5; }
+  .card.opened h3 { text-decoration: line-through; }
+
+  .toggle {
+    margin-top: 10px; width: 100%; padding: 6px 10px; font-size: 12px;
+    font-family: inherit; border-radius: 6px; cursor: pointer;
+    border: 1px solid #d6d3d1; background: #fff; color: #57534e;
+  }
+  .toggle:hover { border-color: #a8a29e; background: #f5f5f4; }
+  .card.opened .toggle { background: #1c1917; border-color: #1c1917; color: #fff; }
+
+  .empty { text-align: center; padding: 80px 0; color: #78716c; }
+  footer { padding: 40px 20px; text-align: center; color: #a8a29e; font-size: 13px; }
+  .missing {
+    width: 100%; height: 100%; display: flex; align-items: center;
+    justify-content: center; font-size: 32px; color: #d6d3d1;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>Tillie's Wine Cellar 🍷</h1>
+    <p class="subtitle" id="count"></p>
+  </div>
+</header>
+
+<div class="container">
+  <div class="controls">
+    <input type="search" id="search" placeholder="Search brand, country, year…">
+    <div class="filters" id="filters"></div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">Nothing matches that.</div>
+</div>
+
+<footer>Made for Tillie 🍷</footer>
+
+<script src="wines.js"></script>
+<script>
+  const wines = window.WINES || [];
+  const grid = document.getElementById('grid');
+  const countEl = document.getElementById('count');
+  const filtersEl = document.getElementById('filters');
+  const searchEl = document.getElementById('search');
+
+  let openedKeys = [];
+  let activeType = 'All';
+  let query = '';
+
+  function wineKey(w) {
+    return (w.brand || '') + '|' + (w.name || '') + '|' + (w.year || '') + '|' + (w.image || '');
+  }
+
+  async function loadOpened() {
+    try {
+      const res = await fetch('/.netlify/functions/get-opened');
+      openedKeys = await res.json();
+    } catch (e) {
+      openedKeys = [];
+    }
+  }
+
+  async function toggleOpened(key) {
+    const isOpen = openedKeys.includes(key);
+    // Optimistic update — flip UI immediately
+    if (isOpen) openedKeys = openedKeys.filter(k => k !== key);
+    else openedKeys = [...openedKeys, key];
+    render();
+
+    try {
+      await fetch('/.netlify/functions/set-opened', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key, opened: !isOpen })
+      });
+    } catch (e) {
+      // Revert on failure
+      if (isOpen) openedKeys = [...openedKeys, key];
+      else openedKeys = openedKeys.filter(k => k !== key);
+      render();
+    }
+  }
+
+  function updateCount() {
+    const openCount = wines.filter(w => openedKeys.includes(wineKey(w))).length;
+    const left = wines.length - openCount;
+    countEl.textContent = left + (left === 1 ? ' bottle' : ' bottles') +
+      ' in the collection' + (openCount ? ' · ' + openCount + ' opened' : '');
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  function renderFilters() {
+    const types = ['All', ...Array.from(new Set(wines.map(w => w.type))).sort()];
+    filtersEl.innerHTML = '';
+    types.forEach(t => {
+      const b = document.createElement('button');
+      b.textContent = t;
+      if (t === activeType) b.classList.add('active');
+      b.onclick = () => { activeType = t; render(); };
+      filtersEl.appendChild(b);
+    });
+  }
+
+  function render() {
+    const q = query.trim().toLowerCase();
+    const visible = wines
+      .filter(w => activeType === 'All' || w.type === activeType)
+      .filter(w => {
+        if (!q) return true;
+        return [w.brand, w.name, w.country, w.region, w.year]
+          .filter(Boolean)
+          .some(f => String(f).toLowerCase().includes(q));
+      })
+      .sort((a, b) => (b.year || 0) - (a.year || 0) || a.brand.localeCompare(b.brand));
+
+    renderFilters();
+    updateCount();
+    grid.innerHTML = '';
+
+    visible.forEach(w => {
+      const key = wineKey(w);
+      const isOpen = openedKeys.includes(key);
+
+      const card = document.createElement('article');
+      card.className = 'card' + (isOpen ? ' opened' : '');
+      card.innerHTML =
+        '<div class="photo">' +
+          '<img src="' + escapeHtml(w.image) + '" alt="' +
+            escapeHtml(w.brand + ' ' + w.name) + '" loading="lazy">' +
+        '</div>' +
+        '<div class="body">' +
+          '<div class="meta">' + (w.year || 'NV') + ' · ' + escapeHtml(w.country || '') + '</div>' +
+          '<h3>' + escapeHtml(w.brand) + '</h3>' +
+          (w.name ? '<p class="name">' + escapeHtml(w.name) + '</p>' : '') +
+          (w.notes ? '<p class="notes">' + escapeHtml(w.notes) + '</p>' : '') +
+          '<button class="toggle">' + (isOpen ? 'Undo' : 'Opened') + '</button>' +
+        '</div>';
+
+      const img = card.querySelector('img');
+      img.onerror = () => { img.parentNode.innerHTML = '<div class="missing">🍷</div>'; };
+
+      card.querySelector('.toggle').onclick = () => toggleOpened(key);
+      grid.appendChild(card);
+    });
+  }
+
+  searchEl.addEventListener('input', e => { query = e.target.value; render(); });
+
+  loadOpened().then(render);
+</script>
+
+</body>
+</html>
