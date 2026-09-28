@@ -1,0 +1,4 @@
+[build]
+  base = "tillies-wine"
+  publish = "."
+  functions = "netlify/functions"
