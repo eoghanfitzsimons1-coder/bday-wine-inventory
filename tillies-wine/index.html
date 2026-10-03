@@ -58,6 +58,53 @@
     width: 100%; height: 100%; display: flex; align-items: center;
     justify-content: center; font-size: 32px; color: #d6d3d1;
   }
+ /* modal */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(28,25,23,.6);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; z-index: 50; animation: fade .15s ease;
+}
+@keyframes fade { from { opacity: 0; } }
+.modal {
+  background: #fff; border-radius: 16px; max-width: 720px; width: 100%;
+  max-height: 90vh; overflow: auto; position: relative;
+  animation: rise .2s ease;
+}
+@keyframes rise { from { transform: translateY(12px); opacity: 0; } }
+.modal-close {
+  position: absolute; top: 12px; right: 12px; width: 32px; height: 32px;
+  border-radius: 50%; border: none; background: rgba(0,0,0,.5); color: #fff;
+  font-size: 20px; line-height: 1; cursor: pointer; z-index: 2;
+}
+.modal-close:hover { background: rgba(0,0,0,.75); }
+.modal-hero { aspect-ratio: 16/10; background: #f5f5f4; }
+.modal-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.modal-hero.opened img { filter: grayscale(1); opacity: .6; }
+.modal-body { padding: 24px; }
+.modal-body .meta { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #a8a29e; }
+.modal-body h2 { margin: 4px 0 0; font-size: 24px; letter-spacing: -.01em; }
+.modal-body .subname { margin: 2px 0 0; font-size: 16px; color: #78716c; }
+.modal-notes { margin: 16px 0 0; font-size: 15px; line-height: 1.6; color: #44403c; }
+.modal-rows { margin: 20px 0 0; border-top: 1px solid #e7e5e4; }
+.modal-row {
+  display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px solid #f5f5f4;
+  font-size: 14px;
+}
+.modal-row dt { width: 130px; flex-shrink: 0; color: #a8a29e; }
+.modal-row dd { margin: 0; color: #1c1917; }
+.modal-actions { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
+.modal-actions button, .modal-actions a {
+  flex: 1; min-width: 140px; padding: 10px 16px; border-radius: 8px;
+  font-size: 14px; font-family: inherit; cursor: pointer; text-align: center;
+  text-decoration: none; border: 1px solid #d6d3d1; background: #fff; color: #1c1917;
+}
+.modal-actions button:hover, .modal-actions a:hover { border-color: #a8a29e; background: #f5f5f4; }
+.modal-actions .primary { background: #1c1917; border-color: #1c1917; color: #fff; }
+.modal-actions .primary:hover { background: #292524; }
+.modal-status {
+  display: inline-block; margin-top: 12px; padding: 4px 12px; border-radius: 999px;
+  font-size: 12px; background: #1c1917; color: #fff;
+}
 </style>
 </head>
 <body>
@@ -91,6 +138,11 @@
   let openedKeys = [];
   let activeType = 'All';
   let query = '';
+  let openWine = null;   // currently displayed in modal
+
+  const modalRoot = document.createElement('div');
+  modalRoot.id = 'modal-root';
+  document.body.appendChild(modalRoot);
 
   function wineKey(w) {
     return (w.brand || '') + '|' + (w.name || '') + '|' + (w.year || '') + '|' + (w.image || '');
@@ -107,7 +159,6 @@
 
   async function toggleOpened(key) {
     const isOpen = openedKeys.includes(key);
-    // Optimistic update — flip UI immediately
     if (isOpen) openedKeys = openedKeys.filter(k => k !== key);
     else openedKeys = [...openedKeys, key];
     render();
@@ -119,7 +170,6 @@
         body: JSON.stringify({ key, opened: !isOpen })
       });
     } catch (e) {
-      // Revert on failure
       if (isOpen) openedKeys = [...openedKeys, key];
       else openedKeys = openedKeys.filter(k => k !== key);
       render();
@@ -157,7 +207,7 @@
       .filter(w => activeType === 'All' || w.type === activeType)
       .filter(w => {
         if (!q) return true;
-        return [w.brand, w.name, w.country, w.region, w.year]
+        return [w.brand, w.name, w.country, w.region, w.year, w.grapes]
           .filter(Boolean)
           .some(f => String(f).toLowerCase().includes(q));
       })
@@ -173,6 +223,7 @@
 
       const card = document.createElement('article');
       card.className = 'card' + (isOpen ? ' opened' : '');
+      card.style.cursor = 'pointer';
       card.innerHTML =
         '<div class="photo">' +
           '<img src="' + escapeHtml(w.image) + '" alt="' +
@@ -183,16 +234,93 @@
           '<h3>' + escapeHtml(w.brand) + '</h3>' +
           (w.name ? '<p class="name">' + escapeHtml(w.name) + '</p>' : '') +
           (w.notes ? '<p class="notes">' + escapeHtml(w.notes) + '</p>' : '') +
-          '<button class="toggle">' + (isOpen ? 'Undo' : 'Opened') + '</button>' +
         '</div>';
 
       const img = card.querySelector('img');
       img.onerror = () => { img.parentNode.innerHTML = '<div class="missing">🍷</div>'; };
 
-      card.querySelector('.toggle').onclick = () => toggleOpened(key);
+      card.onclick = () => { openWine = w; renderModal(); };
       grid.appendChild(card);
     });
+
+    if (openWine) renderModal();
   }
+
+  function renderModal() {
+    if (!openWine) { modalRoot.innerHTML = ''; return; }
+
+    const w = openWine;
+    const key = wineKey(w);
+    const isOpen = openedKeys.includes(key);
+
+    const rows = [
+      ['Type', w.type],
+      ['Country', w.country],
+      ['Region', w.region],
+      ['Grapes', w.grapes],
+      ['Drink', w.drink_from || w.drink_to
+        ? (w.drink_from && w.drink_to ? w.drink_from + '–' + w.drink_to
+          : w.drink_from ? 'from ' + w.drink_from
+          : 'until ' + w.drink_to)
+        : ''],
+      ['Serve', w.serve],
+      ['Pair with', w.pairing],
+      ['Bought at', w.vendor],
+      ['Price', w.price],
+    ].filter(([, v]) => v);
+
+    modalRoot.innerHTML =
+      '<div class="modal-backdrop">' +
+        '<div class="modal" role="dialog" aria-modal="true">' +
+          '<button class="modal-close" aria-label="Close">×</button>' +
+          '<div class="modal-hero' + (isOpen ? ' opened' : '') + '">' +
+            '<img src="' + escapeHtml(w.image) + '" alt="' +
+              escapeHtml(w.brand + ' ' + w.name) + '">' +
+          '</div>' +
+          '<div class="modal-body">' +
+            '<div class="meta">' + (w.year || 'NV') + ' · ' + escapeHtml(w.country || '') + '</div>' +
+            '<h2>' + escapeHtml(w.brand) + '</h2>' +
+            (w.name ? '<p class="subname">' + escapeHtml(w.name) + '</p>' : '') +
+            (isOpen ? '<span class="modal-status">Opened</span>' : '') +
+            (w.notes ? '<p class="modal-notes">' + escapeHtml(w.notes) + '</p>' : '') +
+            (rows.length
+              ? '<dl class="modal-rows">' +
+                  rows.map(([k, v]) =>
+                    '<div class="modal-row"><dt>' + escapeHtml(k) + '</dt>' +
+                    '<dd>' + escapeHtml(v) + '</dd></div>'
+                  ).join('') +
+                '</dl>'
+              : '') +
+            '<div class="modal-actions">' +
+              '<button class="' + (isOpen ? '' : 'primary') + '" id="modal-toggle">' +
+                (isOpen ? 'Undo — still have it' : 'Mark as opened') +
+              '</button>' +
+              (w.link ? '<a href="' + escapeHtml(w.link) + '" target="_blank" rel="noopener">More info ↗</a>' : '') +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    const modalImg = modalRoot.querySelector('.modal-hero img');
+    modalImg.onerror = () => {
+      modalImg.parentNode.innerHTML = '<div class="missing">🍷</div>';
+    };
+
+    modalRoot.querySelector('.modal-close').onclick = closeModal;
+    modalRoot.querySelector('.modal-backdrop').onclick = e => {
+      if (e.target.classList.contains('modal-backdrop')) closeModal();
+    };
+    modalRoot.querySelector('#modal-toggle').onclick = () => toggleOpened(key);
+  }
+
+  function closeModal() {
+    openWine = null;
+    modalRoot.innerHTML = '';
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && openWine) closeModal();
+  });
 
   searchEl.addEventListener('input', e => { query = e.target.value; render(); });
 
