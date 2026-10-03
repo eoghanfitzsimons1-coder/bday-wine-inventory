@@ -86,7 +86,7 @@
   country: "France",
   region: "Champagne",
   type: "Champagne",
-  image: "images/IMG_0893.jpg",
+  image: "images/IMG_0975.jpg",
   grapes: "Chardonnay, Pinot Noir, Meunier",
   drink_from: 2025,
   drink_to: 2027,
