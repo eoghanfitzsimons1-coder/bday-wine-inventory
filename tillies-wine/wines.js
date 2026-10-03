@@ -80,14 +80,22 @@
     notes: "Raspberries, redcurrants, delicate and crisp."
   },
   {
-    brand: "Moët & Chandon",
-    name: "Moët Impérial Brut",
-    year: null,
-    country: "France",
-    region: "Champagne",
-    type: "Champagne",
-    image: "images/IMG_0893.jpg",
-    notes: "Bright fruitiness, seductive palate, elegant maturity."
+  brand: "Moët & Chandon",
+  name: "Moët Impérial Brut",
+  year: null,
+  country: "France",
+  region: "Champagne",
+  type: "Champagne",
+  image: "images/IMG_0893.jpg",
+  grapes: "Chardonnay, Pinot Noir, Meunier",
+  drink_from: 2025,
+  drink_to: 2027,
+  serve: "8–10°C",
+  pairing: "Oysters, fried food, celebrations",
+  vendor: "Duty free",
+  price: "€45",
+  link: "https://www.vivino.com/",
+  notes: "Bright fruitiness, seductive palate, elegant maturity."
   },
   {
     brand: "Montelliana",
