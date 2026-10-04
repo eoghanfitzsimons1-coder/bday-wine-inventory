@@ -37,7 +37,6 @@
     region: "Hampshire",
     type: "Gin",
     image: "images/IMG_0887.jpg",
-    ingredients: "Junpier berries & botanicals",
     abv: "40%",
     serve: "0–4°C",
     pairing: "Tonic",
@@ -81,7 +80,7 @@
     country: "Georgia",
     region: "Kakheti",
     type: "Red",
-    image: "images/img_0880.jpg",
+    image: "images/IMG_0880.jpg",
     grapes: "Saperavi",
     abv: "13.5%",
     serve: "16°C",
@@ -100,7 +99,7 @@
     grapes: "Pinot Noir, Chardonnay",
     abv: "12%",
     serve: "8–10°C",
-    pairing: "Pork, fish, soft cheese"
+    pairing: "Pork, fish, soft cheese",
     link: "https://www.vivino.com/en/montaubret-brut-champagne/w/1502114?srsltid=AU7gw4Xp4xk-0t8e_0-xr1v5DSf7f3foB6xNfBhhtI6EI3kkjec5brGj",
     notes: "Fresh notes of blossom, yellow fruits, and peach."
   },
@@ -160,7 +159,7 @@
     grapes: "Grenache Blanc, Roussanne, Grenache Gris",
     abv: "13.5%",
     serve: "12–14°C",
-    pairing: "Bouillabaisse, rich cheeses"",
+    pairing: "Bouillabaisse, rich cheeses",
     link: "https://www.caraguilhes.fr/wp-content/uploads/2026/03/FTD-Qin-Yu-2023.pdf",
     notes: "Expressive and richly flavoured."
   },
@@ -175,7 +174,7 @@
     grapes: "Chardonnay, Pinot Noir, Meunier",
     abv: "12.5%",
     serve: "8–10°C",
-    pairing: "Seafood, foie gras, ham"
+    pairing: "Seafood, foie gras, ham",
     link: "https://www.taittinger.com/en/champagnes/brut-reserve",
     notes: "Subtle notes of fresh fruit, brioche, and honey."
   },
