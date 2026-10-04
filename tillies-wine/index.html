@@ -258,11 +258,7 @@
       ['Country', w.country],
       ['Region', w.region],
       ['Grapes', w.grapes],
-      ['Drink', w.drink_from || w.drink_to
-        ? (w.drink_from && w.drink_to ? w.drink_from + '–' + w.drink_to
-          : w.drink_from ? 'from ' + w.drink_from
-          : 'until ' + w.drink_to)
-        : ''],
+      ['ABV', w.abv],
       ['Serve', w.serve],
       ['Pair with', w.pairing],
       ['Bought at', w.vendor],
