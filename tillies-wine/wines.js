@@ -4,9 +4,14 @@
     name: "Blanc de Blancs Brut Nature",
     year: 2024,
     country: "France",
-    region: "Loire Valley",
+    region: "Touraine, Loire Valley",
     type: "Sparkling White",
     image: "images/IMG_0885.jpg",
+    grapes: "Chardonnay",
+    abv: "12%",
+    serve: "6–8°C",
+    pairing: "Salty snacks and fried foods",
+    link: "https://www.vivino.com/en/plou-fils-tuffeau-blanc-de-blancs-brut-nature/w/6791381?srsltid=AU7gw4Urc3G60CuMiYAOepJe9oG8ppI2QPegoxn6pKak-lVikmlv8aLY",
     notes: "Crisp, clean apple fruits, mineral, finishing dry."
   },
   {
@@ -17,6 +22,11 @@
     region: "Champagne",
     type: "Champagne",
     image: "images/IMG_0886.jpg",
+    grapes: "Pinot Meunier, Pinot Nero, Chardonnay",
+    abv: "12.5%",
+    serve: "8–10°C",
+    pairing: "Fresh shellfish, delicate white fish, and light starters",
+    link: "https://www.vivino.com/en/alain-mercier-louis-hurtebisse-brut-tradition-champagne/w/1544795?srsltid=AU7gw4VvulC9L-__BBqy-duwAdI81xWsbYt5ne18XeM7biS15vMCQ_1H",
     notes: "Candied fruit, peach, apricot, fresh and lively."
   },
   {
@@ -24,9 +34,14 @@
     name: "London Dry Gin",
     year: null,
     country: "England",
-    region: "",
+    region: "Hampshire",
     type: "Gin",
     image: "images/IMG_0887.jpg",
+    ingredients: "Junpier berries & botanicals",
+    abv: "40%",
+    serve: "0–4°C",
+    pairing: "Tonic",
+    link: "https://www.bombaysapphire.com/products/bombay-dry-gin/",
     notes: "Crisp flavors, exotic botanicals."
   },
   {
@@ -34,9 +49,14 @@
     name: "Vino Frizzante",
     year: null,
     country: "Italy",
-    region: "",
+    region: "Gambellara, Veneto",
     type: "Sparkling Rosé",
     image: "images/IMG_0888.jpg",
+    grapes: "Glera, Pinot Nero",
+    abv: "11%",
+    serve: "8–10°C",
+    pairing: "Appetizers and snacks",
+    link: "https://kylieminoguewines.com/wines/prosecco-rose/",
     notes: "Fresh summer berries and blossom."
   },
   {
@@ -47,6 +67,11 @@
     region: "Marlborough",
     type: "White",
     image: "images/IMG_0889.jpg",
+    grapes: "Sauvignon blanc",
+    abv: "12.5%",
+    serve: "8°C",
+    pairing: "Fish, shellfish, salads",
+    link: "https://villamariawines.com/ie/products/private-bin-sauvignon-blanc/",
     notes: "Vibrant passionfruit, fresh citrus, herbaceous notes."
   },
   {
@@ -57,6 +82,11 @@
     region: "Kakheti",
     type: "Red",
     image: "images/img_0880.jpg",
+    grapes: "Saperavi",
+    abv: "13.5%",
+    serve: "16°C",
+    pairing: "Roast lamb, beef, hard cheese",
+    link: "https://bedoba.wine/01-wines/",
     notes: "Blackberry, cherry, plum fruit flavours, white pepper, savoury."
   },
   {
@@ -67,6 +97,11 @@
     region: "Champagne",
     type: "Champagne",
     image: "images/IMG_0881.jpg",
+    grapes: "Pinot Noir, Chardonnay",
+    abv: "12%",
+    serve: "8–10°C",
+    pairing: "Pork, fish, soft cheese"
+    link: "https://www.vivino.com/en/montaubret-brut-champagne/w/1502114?srsltid=AU7gw4Xp4xk-0t8e_0-xr1v5DSf7f3foB6xNfBhhtI6EI3kkjec5brGj",
     notes: "Fresh notes of blossom, yellow fruits, and peach."
   },
   {
@@ -74,9 +109,14 @@
     name: "Saint Mont",
     year: 2025,
     country: "France",
-    region: "South West France",
+    region: "Saint Mont, Occitanie",
     type: "Rosé",
     image: "images/IMG_0882.jpg",
+    grapes: "Tannat, Pinenc, Cabernet Sauvignon, Cabernet Franc, Merlot",
+    abv: "11.5%",
+    serve: "8–10°C",
+    pairing: "Seafood, salad",
+    link: "https://www.marksandspencer.com/food/fleur-de-lise-ros/p/fdp60544312",
     notes: "Raspberries, redcurrants, delicate and crisp."
   },
   {
@@ -88,13 +128,10 @@
   type: "Champagne",
   image: "images/IMG_0975.jpg",
   grapes: "Chardonnay, Pinot Noir, Meunier",
-  drink_from: 2025,
-  drink_to: 2027,
+  abv: "12%",
   serve: "8–10°C",
-  pairing: "Oysters, fried food, celebrations",
-  vendor: "Duty free",
-  price: "€45",
-  link: "https://www.vivino.com/",
+  pairing: "Oysters, Blue Cheese",
+  link: "https://www.moet.com/en-int/moet-imperial",
   notes: "Bright fruitiness, seductive palate, elegant maturity."
   },
   {
@@ -102,19 +139,29 @@
     name: "Prosecco Vino Frizzante",
     year: null,
     country: "Italy",
-    region: "Treviso",
+    region: "Treviso, Veneto",
     type: "Prosecco",
     image: "images/IMG_0892.jpg",
-    notes: "Fresh, floral, and fruity aromas."
+    grapes: "Glera",
+    abv: "10.5%",
+    serve: "8–10°C",
+    pairing: "Light dishes and fish",
+    link: "https://www.montelliana.com/en/wines/prosecco-doc-treviso-frizzante-spago/",
+    notes: "Full-bodied, mildly sweet, harmonious taste"
   },
   {
     brand: "Château de Caraguilhes",
     name: "Vin D'Infusion",
     year: 2023,
     country: "France",
-    region: "Corbières",
+    region: "Corbières, Languedoc",
     type: "Orange Wine",
     image: "images/IMG_0895.jpg",
+    grapes: "Grenache Blanc, Roussanne, Grenache Gris",
+    abv: "13.5%",
+    serve: "12–14°C",
+    pairing: "Bouillabaisse, rich cheeses"",
+    link: "https://www.caraguilhes.fr/wp-content/uploads/2026/03/FTD-Qin-Yu-2023.pdf",
     notes: "Expressive and richly flavoured."
   },
   {
@@ -125,6 +172,11 @@
     region: "Champagne",
     type: "Champagne",
     image: "images/IMG_0890.jpg",
+    grapes: "Chardonnay, Pinot Noir, Meunier",
+    abv: "12.5%",
+    serve: "8–10°C",
+    pairing: "Seafood, foie gras, ham"
+    link: "https://www.taittinger.com/en/champagnes/brut-reserve",
     notes: "Subtle notes of fresh fruit, brioche, and honey."
   },
   {
@@ -135,6 +187,11 @@
     region: "Champagne",
     type: "Champagne",
     image: "images/IMG_0883.jpg",
+    grapes: "Chardonnay, Pinot Noir, Meunier",
+    abv: "12%",
+    serve: "8–10°C",
+    pairing: "Oysters, Blue Cheese",
+    link: "https://www.moet.com/en-int/moet-imperial",
     notes: "Bright fruitiness, seductive palate, elegant maturity."
   },
   {
@@ -145,6 +202,11 @@
     region: "Champagne",
     type: "Champagne",
     image: "images/IMG_0884.jpg",
+    grapes: "Chardonnay, Pinot Noir, Meunier",
+    abv: "12%",
+    serve: "8–10°C",
+    pairing: "Oysters, Blue Cheese",
+    link: "https://www.moet.com/en-int/moet-imperial",
     notes: "Bright fruitiness, seductive palate, elegant maturity."
   },
   {
@@ -155,6 +217,11 @@
     region: "Champagne",
     type: "Champagne",
     image: "images/IMG_0891.jpg",
+    grapes: "Chardonnay, Pinot Noir, Meunier",
+    abv: "12%",
+    serve: "8–10°C",
+    pairing: "Oysters, Blue Cheese",
+    link: "https://www.moet.com/en-int/moet-imperial",
     notes: "Bright fruitiness, seductive palate, elegant maturity."
   }
 ];
